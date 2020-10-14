@@ -4,7 +4,7 @@ import { COLORS } from '../constants'
 
 const Home = () => {
     return (
-        <View>
+        <View style={styles.container}>
             <Text>Home</Text>
         </View>
     )
