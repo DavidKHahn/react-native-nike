@@ -84,6 +84,12 @@ const Home = () => {
     ]);
 
     function renderTrendingShoes(item, index) {
+        var trendingStyle = {};
+
+        if (index == 0) {
+            trendingStyle = { marginLeft: SIZES.padding }
+        }
+
         return (
             <TouchableOpacity
                 style={{ height: 240, width: 180, justifyContent: 'center', marginHorizontal: SIZES.base, }}
@@ -106,6 +112,23 @@ const Home = () => {
                         <Text style={{ color: COLORS.white, ...FONTS.h3 }}>{item.price}</Text>
                     </View>
                 </View>
+
+                <Image
+                    source={item.img}
+                    resizeMode="cover"
+                    style={{
+                        position: 'absolute',
+                        top: 50,
+                        right: 0,
+                        width: '98%',
+                        height: 80,
+                        transform: [
+                            {
+                                rotate: '-15deg'
+                            }
+                        ]
+                    }}
+                ></Image>
             </TouchableOpacity>
         )
     }
