@@ -1,9 +1,13 @@
+import { BlurView } from "@react-native-community/blur";
 import React from 'react';
-import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Polygon, Svg } from 'react-native-svg';
 import { COLORS, FONTS, images, SIZES } from '../constants';
 
 const Home = () => {
+    const [showAddToBagModal, setShowAddToBagModal] = React.useState(false);
+    const [selectedItem, setSelectedItem] = React.useState(null);
+    const [selectedSize, setSelectedSize] = React.useState("");
     // Dummy Data
     const [trending, setTrending] = React.useState([
         {
@@ -92,6 +96,10 @@ const Home = () => {
         return (
             <TouchableOpacity
                 style={{ height: 240, width: 180, justifyContent: 'center', marginHorizontal: SIZES.base, }}
+                onPress={() => {
+                    setSelectedItem(item)
+                    setShowAddToBagModal(true)
+                }}
             >
                 <Text style={{ color: COLORS.gray, ...FONTS.h5 }}>{item.type}</Text>
 
@@ -214,6 +222,33 @@ const Home = () => {
                             </FlatList>
                     </View>
                 </View>
+                {/* Modal */}
+                {selectedItem &&
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={showAddToBagModal}
+                    >
+                        <BlurView
+                            style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+                            blurType="light"
+                            blurAmount={20}
+                            reducedTransparencyFallbackColor="white"
+                        >
+                            {/* Button to close modal */}
+                            <TouchableOpacity
+                                style={styles.absolute}
+                                onPress={() => {
+                                    setSelectedItem(null)
+                                    setSelectedSize("")
+                                    setShowAddToBagModal(false)
+                                }}
+                            >
+
+                            </TouchableOpacity>
+                        </BlurView>
+                    </Modal>
+                }
             </View>
     )
 }
@@ -242,6 +277,13 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.43,
         shadowRadius: 9.51,
         elevation: 15
+    },
+    absolute: {
+        position: "absolute",
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
     }
 })
 
