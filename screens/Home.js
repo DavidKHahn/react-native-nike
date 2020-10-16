@@ -1,9 +1,9 @@
 import React from 'react';
-import { FlatList, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Polygon, Svg } from 'react-native-svg';
 import { COLORS, FONTS, images, SIZES } from '../constants';
 
 const Home = () => {
-
     // Dummy Data
     const [trending, setTrending] = React.useState([
         {
@@ -89,14 +89,13 @@ const Home = () => {
         if (index == 0) {
             trendingStyle = { marginLeft: SIZES.padding }
         }
-
         return (
             <TouchableOpacity
                 style={{ height: 240, width: 180, justifyContent: 'center', marginHorizontal: SIZES.base, }}
             >
                 <Text style={{ color: COLORS.gray, ...FONTS.h5 }}>{item.type}</Text>
 
-                <View style={{
+                <View style={[{
                     flex: 1,
                     justifyContent: 'flex-end',
                     marginTop: SIZES.base,
@@ -106,11 +105,20 @@ const Home = () => {
                     paddingRight: SIZES.padding,
                     paddingBottom: SIZES.radius,
                     backgroundColor: item.bgColor
-                }}>
+                }, styles.trendingShadow]}>
                     <View style={{ height: '35%', justifyContent: 'space-between' }}>
                         <Text style={{ color: COLORS.white, ...FONTS.body4 }}>{item.name}</Text>
                         <Text style={{ color: COLORS.white, ...FONTS.h3 }}>{item.price}</Text>
                     </View>
+                </View>
+
+                <View style={{ position: 'absolute', top: 27, right: 0, width: '95%', height: '100%' }}>
+                    <Svg height="100%" width="100%">
+                        <Polygon
+                            points="0,0 160,0 160,80"
+                            fill="white"
+                        />
+                    </Svg>
                 </View>
 
                 <Image
@@ -135,21 +143,39 @@ const Home = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={{ marginTop: SIZES.radius, marginHorizontal: SIZES.padding, ...FONTS.largeTitleBold }}>Home</Text>
+            <Text style={{
+                marginTop: SIZES.radius,
+                marginHorizontal: SIZES.padding,
+                ...FONTS.largeTitleBold }}>TRENDING</Text>
 
             {/* Trending */}
-            <View>
                 <View style={{ height: 260, marginTop: SIZES.radius}}>
                     <FlatList
                         horizontal
                         showsHorizontalScrollIndicator={false}
                         data={trending}
                         keyExtractor={item => item.id.toString()}
-                        renderItem={(item, index) => renderTrendingShoes(item, index)}
+                        renderItem={({item, index}) => renderTrendingShoes(item, index)}
                     />
                 </View>
+
+                {/* Recently Viewed */}
+                <View style={[{ flex: 1, flexDirection:'row', marginTop: SIZES.padding, borderTopLeftRadius: 30, borderTopRightRadius: 30, backgroundColor: COLORS.white }, styles.recentContainerShadow]}>
+                    <View style={{ width: 70, marginLeft: SIZES.base }}>
+                        <Image
+                            source={images.recentlyViewedLabel}
+                            resizedMode="contain"
+                            style={{
+                                width: "100%",
+                                height: "100%"
+                            }}
+                        />
+                    </View>
+                    <View style={{ flex: 1, paddingBottom: SIZES.padding }}>
+
+                    </View>
+                </View>
             </View>
-        </View>
     )
 }
 
@@ -157,6 +183,26 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: COLORS.white
+    },
+    trendingShadow: {
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.29,
+        shadowRadius: 4.65,
+        elevation: 7
+    },
+    recentContainerShadow: {
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 7,
+        },
+        shadowOpacity: 0.43,
+        shadowRadius: 9.51,
+        elevation: 15
     }
 })
 

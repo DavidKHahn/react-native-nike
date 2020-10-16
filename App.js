@@ -6,7 +6,6 @@ import { COLORS, FONTS, icons, SIZES } from './constants';
 // Screens
 import { Home } from "./screens";
 
-
 const theme = {
   ...DefaultTheme,
   colors: {
@@ -20,8 +19,8 @@ const Stack = createStackNavigator();
 const App = () => {
   return (
     <NavigationContainer theme={theme}>
-      <Stack.createStackNavigator
-        initialRouteName={''}
+      <Stack.Navigator
+        initialRouteName={'Home'}
       >
         <Stack.Screen
           name="Home"
@@ -64,7 +63,7 @@ const App = () => {
             )
           }}
         />
-      </Stack.createStackNavigator>
+      </Stack.Navigator>
     </NavigationContainer>
   )
 }
