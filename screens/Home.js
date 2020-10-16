@@ -141,6 +141,32 @@ const Home = () => {
         )
     }
 
+    function renderRecentlyViewed(item, index) {
+        return (
+            <TouchableOpacity
+                style={{ flex: 1, flexDirection: 'row' }}
+                onpress={() => {
+                    console.log('renderRecentlyViewed')
+                }}
+            >
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <Image
+                    source={item.img}
+                    resizeMode="contain"
+                    style={{
+                        width: 130,
+                        height: 100
+                    }}
+                />
+            </View>
+            <View style={{ flex: 1.5, marginleft: SIZES.radius, justifyContent: 'center' }}>
+                <Text style={{ color: COLORS.gray, ...FONTS.body3 }}>{item.name}</Text>
+                <Text style={{ ...FONTS.h3 }}>{item.price}</Text>
+            </View>
+            </TouchableOpacity>
+        )
+    }
+
     return (
         <View style={styles.container}>
             <Text style={{
@@ -160,7 +186,14 @@ const Home = () => {
                 </View>
 
                 {/* Recently Viewed */}
-                <View style={[{ flex: 1, flexDirection:'row', marginTop: SIZES.padding, borderTopLeftRadius: 30, borderTopRightRadius: 30, backgroundColor: COLORS.white }, styles.recentContainerShadow]}>
+                <View style={[{
+                    flex: 1,
+                    flexDirection:'row',
+                    marginTop: SIZES.padding,
+                    borderTopLeftRadius: 30,
+                    borderTopRightRadius: 30,
+                    backgroundColor: COLORS.white },
+                    styles.recentContainerShadow]}>
                     <View style={{ width: 70, marginLeft: SIZES.base }}>
                         <Image
                             source={images.recentlyViewedLabel}
@@ -172,7 +205,13 @@ const Home = () => {
                         />
                     </View>
                     <View style={{ flex: 1, paddingBottom: SIZES.padding }}>
+                            <FlatList
+                                showsVerticalScrollIndicator={false}
+                                data={recentlyViewed}
+                                keyExtractor={item => item.id.toString()}
+                                renderItem={({ item, index }) => renderRecentlyViewed(item, index)}>
 
+                            </FlatList>
                     </View>
                 </View>
             </View>
