@@ -246,6 +246,21 @@ const Home = () => {
                             >
 
                             </TouchableOpacity>
+                            <View style={{ justifyContent: "center", width: "85%" }}>
+                                <View>
+                                    <Image
+                                        source={selectedItem.img}
+                                        resizeMode="contain"
+                                        style={{
+                                            width: "90%",
+                                            height: 170,
+                                            transform: [{
+                                                rotate: "-15deg"
+                                            }]
+                                        }}
+                                    />
+                                </View>
+                            </View>
                         </BlurView>
                     </Modal>
                 }
