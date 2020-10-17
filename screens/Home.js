@@ -92,6 +92,8 @@ const Home = () => {
 
         if (index == 0) {
             trendingStyle = { marginLeft: SIZES.padding }
+        } else {
+            trendingStyle = {};
         }
         return (
             <TouchableOpacity
@@ -149,79 +151,105 @@ const Home = () => {
         )
     }
 
-    function renderRecentlyViewed(item, index) {
+   function renderRecentlyViewed(item, index) {
         return (
             <TouchableOpacity
                 style={{ flex: 1, flexDirection: 'row' }}
-                onpress={() => {
-                    console.log('renderRecentlyViewed')
+                onPress={() => {
+                    setSelectedItem(item)
+                    setShowAddToBagModal(true)
                 }}
             >
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <Image
-                    source={item.img}
-                    resizeMode="contain"
-                    style={{
-                        width: 130,
-                        height: 100
-                    }}
-                />
-            </View>
-            <View style={{ flex: 1.5, marginleft: SIZES.radius, justifyContent: 'center' }}>
-                <Text style={{ color: COLORS.gray, ...FONTS.body3 }}>{item.name}</Text>
-                <Text style={{ ...FONTS.h3 }}>{item.price}</Text>
-            </View>
+                <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+                    <Image
+                        source={item.img}
+                        resizeMode="contain"
+                        style={{
+                            width: 130,
+                            height: 100,
+                        }}
+                    />
+                </View>
+                <View style={{ flex: 1.5, marginLeft: SIZES.radius, justifyContent: "center" }}>
+                    <Text style={{ color: COLORS.gray, ...FONTS.body3 }}>{item.name}</Text>
+                    <Text style={{ ...FONTS.h3 }}>{item.price}</Text>
+                </View>
             </TouchableOpacity>
+        )
+    }
+
+    function renderShoeSizes() {
+        return (
+            selectedItem.sizes.map((item, index) => {
+                return (
+                    <TouchableOpacity
+                        key={index}
+                        style={{
+                            width: 35,
+                            height: 25,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginHorizontal: 5,
+                            marginBottom: 10,
+                            backgroundColor: selectedItem.sizes[index] == selectedSize ? COLORS.white : null,
+                            borderWidth: 1,
+                            borderColor: COLORS.white,
+                            borderRadius: 5,
+                        }}
+                        onPress={() => {
+                            setSelectedSize(item)
+                        }}
+                    >
+                        <Text style={{ color: selectedItem.sizes[index] == selectedSize ? COLORS.black : COLORS.white, ...FONTS.body4 }}>{item}</Text>
+                    </TouchableOpacity>
+                )
+            })
         )
     }
 
     return (
         <View style={styles.container}>
-            <Text style={{
-                marginTop: SIZES.radius,
-                marginHorizontal: SIZES.padding,
-                ...FONTS.largeTitleBold }}>TRENDING</Text>
+            <Text style={{ marginTop: SIZES.radius, marginHorizontal: SIZES.padding, ...FONTS.largeTitleBold }}>TRENDING</Text>
 
-            {/* Trending */}
-                <View style={{ height: 260, marginTop: SIZES.radius}}>
-                    <FlatList
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        data={trending}
-                        keyExtractor={item => item.id.toString()}
-                        renderItem={({item, index}) => renderTrendingShoes(item, index)}
-                    />
-                </View>
+            <View style={{ height: 260, marginTop: SIZES.radius }}>
+                <FlatList
+                    horizontal
+                    showsHorizontalScrollIndicator={false}
+                    data={trending}
+                    keyExtractor={item => item.id.toString()}
+                    renderItem={({ item, index }) => renderTrendingShoes(item, index)}
+                />
+            </View>
 
-                {/* Recently Viewed */}
-                <View style={[{
+            <View
+                style={[{
                     flex: 1,
-                    flexDirection:'row',
+                    flexDirection: 'row',
                     marginTop: SIZES.padding,
                     borderTopLeftRadius: 30,
                     borderTopRightRadius: 30,
-                    backgroundColor: COLORS.white },
-                    styles.recentContainerShadow]}>
-                    <View style={{ width: 70, marginLeft: SIZES.base }}>
-                        <Image
-                            source={images.recentlyViewedLabel}
-                            resizedMode="contain"
-                            style={{
-                                width: "100%",
-                                height: "100%"
-                            }}
-                        />
-                    </View>
-                    <View style={{ flex: 1, paddingBottom: SIZES.padding }}>
-                            <FlatList
-                                showsVerticalScrollIndicator={false}
-                                data={recentlyViewed}
-                                keyExtractor={item => item.id.toString()}
-                                renderItem={({ item, index }) => renderRecentlyViewed(item, index)}>
-
-                            </FlatList>
-                    </View>
+                    backgroundColor: COLORS.white
+                }, styles.recentContainerShadow]}
+            >
+                <View style={{ width: 70, marginLeft: SIZES.base }}>
+                    <Image
+                        source={images.recentlyViewedLabel}
+                        resizeMode="contain"
+                        style={{
+                            width: "100%",
+                            height: "100%",
+                        }}
+                    />
                 </View>
+                <View style={{ flex: 1, paddingBottom: SIZES.padding }}>
+                    <FlatList
+                        showsVerticalScrollIndicator={false}
+                        data={recentlyViewed}
+                        keyExtractor={item => item.id.toString()}
+                        renderItem={({ item, index }) => renderRecentlyViewed(item, index)}
+                    />
+                </View>
+            </View>
                 {/* Modal */}
                 {selectedItem &&
                     <Modal
@@ -246,8 +274,8 @@ const Home = () => {
                             >
 
                             </TouchableOpacity>
-                            <View style={{ justifyContent: "center", width: "85%" }}>
-                                <View>
+                            <View style={{ justifyContent: "center", width: "85%", backgroundColor: selectedItem.bgColor }}>
+                                <View style={{ justifyContent: "center", width: "85%", backgroundColor: selectedItem.bgColor, marginTop: SIZES.padding * 2 }}>
                                     <Image
                                         source={selectedItem.img}
                                         resizeMode="contain"
@@ -260,6 +288,36 @@ const Home = () => {
                                         }}
                                     />
                                 </View>
+                                    <Text style={{ marginTop: SIZES.padding, marginHorizontal: SIZES.padding, color: COLORS.white, ...FONTS.body2 }}>{selectedItem.name}</Text>
+                                    <Text style={{ marginTop: SIZES.base / 2, marginHorizontal: SIZES.padding, color: COLORS.white, ...FONTS.body3 }}>{selectedItem.type}</Text>
+                                    <Text style={{ marginTop: SIZES.radius, marginHorizontal: SIZES.padding, color: COLORS.white, ...FONTS.h1 }}>{selectedItem.price}</Text>
+                                    <View style={{ flexDirection: 'row', marginTop: SIZES.radius, marginHorizontal: SIZES.padding }}>
+                                        <View>
+                                            <Text style={{ color: COLORS.white, ...FONTS.body3 }}>Select Size</Text>
+                                        </View>
+                                        <View style={{ flex: 1, flexWrap: 'wrap', flexDirection: 'row', marginLeft: SIZES.radius }}>
+                                            {renderShoeSizes()}
+                                        </View>
+                                    </View>
+
+                                    <TouchableOpacity
+                                        style={{
+                                            width: '100%',
+                                            height: 70,
+                                            marginTop: SIZES.base,
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            backgroundColor: 'rgba(0,0,0,0.5)'
+                                        }}
+                                        onPress={() => {
+                                            setSelectedItem(null)
+                                            setSelectedSize("")
+                                            setShowAddToBagModal(false)
+                                        }}
+                                    >
+
+                                        <Text style={{ color: COLORS.white, ...FONTS.largeTitleBold }}>Add To Bag</Text>
+                                    </TouchableOpacity>
                             </View>
                         </BlurView>
                     </Modal>
